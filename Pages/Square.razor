@@ -1,0 +1,15 @@
+@page "/square"
+
+<button style="height:45px;width:45px" onclick="@(() => HandleClick.InvokeAsync(index))">@value</button>
+
+@functions {
+
+    [Parameter]
+    private string value {get; set;}
+
+    [Parameter]
+    private int index {get; set;}
+
+    [Parameter]
+    private EventCallback<int> HandleClick { get; set; }
+}

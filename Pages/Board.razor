@@ -1,0 +1,80 @@
+@page "/board"
+
+<div>
+    <div class="status">Next Player : @nextPlayer</div>
+    <div class="status">@status</div>
+
+    <div class="board-row">
+        <Square value = "@squares[0]" index=0 HandleClick = "@HandleClick"/>
+        <Square value = "@squares[1]" index=1 HandleClick = "@HandleClick"/>
+        <Square value = "@squares[2]" index=2 HandleClick = "@HandleClick"/>
+    </div>
+
+    <div class="board-row">
+        <Square value = "@squares[3]" index=3 HandleClick = "@HandleClick"/>
+        <Square value = "@squares[4]" index=4 HandleClick = "@HandleClick"/>
+        <Square value = "@squares[5]" index=5 HandleClick = "@HandleClick"/>
+    </div>
+
+    <div class="board-row">
+        <Square value = "@squares[6]" index=6 HandleClick = "@HandleClick"/>
+        <Square value = "@squares[7]" index=7 HandleClick = "@HandleClick"/>
+        <Square value = "@squares[8]" index=8 HandleClick = "@HandleClick"/>
+    </div>
+</div>
+
+@functions {
+    string status = "";
+    string nextPlayer = "X";
+    string winner = "";
+    bool continueGame = true;
+    string[] squares = new string[9]{null, null, null, null, null , null, null, null, null};
+
+    private void HandleClick(int index)
+    {
+        
+        if(squares[index] == null && continueGame){
+            squares[index] = nextPlayer;
+            if(nextPlayer == "X"){
+                nextPlayer = "0";
+            }
+            else{
+                nextPlayer = "X";
+            }
+        }
+
+        CalculateWinner();
+        if(!continueGame){
+            status = "winner is "+ winner;
+        }
+        else if(!(Array.IndexOf(squares,null) >= 0) && continueGame){
+            continueGame = false;
+            status = "Game Tied";
+        }
+        
+    }
+
+    private void CalculateWinner()
+    {
+        var lines = new int[8,3]{
+            {0,1,2},
+            {3,4,5},
+            {6,7,8},
+            {0,3,6},
+            {1,4,7},
+            {2,5,8},
+            {0,4,8},
+            {2,4,6}
+            };
+        
+        for(int i = 0; i<8; i++){
+            if(squares[lines[i,0]]!=null
+             && squares[lines[i,0]] == squares[lines[i,1]]
+             && squares[lines[i,0]] == squares[lines[i,2]]){
+                continueGame = false;
+                winner = squares[lines[i,0]];
+                return;
+            }
+        }
+    }
+}
